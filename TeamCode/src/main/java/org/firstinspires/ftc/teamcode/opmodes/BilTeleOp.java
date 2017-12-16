@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.configuration.MotorType;
 import com.qualcomm.robotcore.util.Range;
 import com.vvftc.ninevolt.core.hw.Hardware;
 import com.vvftc.ninevolt.core.hw.HardwareBuilder;
@@ -33,7 +36,7 @@ public class BilTeleOp extends OpMode{
     public void init() {
         try {
             HardwareBuilder hb = new HardwareBuilder(hardwareMap);
-            hb.setMotorConfig(Hardware.MotorMode.TWO_MOTORS, Hardware.MotorType.TETRIX_PITSCO)
+            hb.setMotorConfig(Hardware.MotorMode.TWO_MOTORS, DcMotor.Direction.FORWARD)
                     .addMotorFL("motor_l")
                     .addMotorFR("motor_r");
             this.hardware = hb.build();
@@ -54,11 +57,6 @@ public class BilTeleOp extends OpMode{
     public void loop() {
         //robot moves from person 1's controller
 
-        //- = goes forward
-        //+ = goes backwards
-        //OUTDATED
-
-        // movement.directTankDrive() = directTankDrive(left stick power to left motor, right stick power to right motor)
         movement.directTankDrive(-gamepad1.left_stick_y, -gamepad1.right_stick_y);
 
         //person 2 controls robots arms/claws
@@ -69,13 +67,16 @@ public class BilTeleOp extends OpMode{
         else if (gamepad2.left_bumper)
             clawOffset -= CLAW_SPEED;
 
-
-        if (gamepad2.x) {
+        while (gamepad2.x == true) {
+            telemetry.addData("Claw Status: ", "Snail");
+            telemetry.update();
             if (gamepad2.right_bumper)
-                clawOffset += CLAW_SPEED * 0.5;
+                clawOffset += 0.005;
             else if (gamepad2.left_bumper)
-                clawOffset -= CLAW_SPEED * 0.5;
+                clawOffset -= 0.005;
         }
+            telemetry.addData("Claw Status: ", "Normal");
+            telemetry.update();
 
         // Servos should move in unison
         clawOffset = Range.clip(clawOffset, -0.5, 0.5);

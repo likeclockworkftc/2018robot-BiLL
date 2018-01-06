@@ -1,8 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous.Blue;
 
+import android.app.Activity;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.vvftc.ninevolt.core.hw.Hardware;
@@ -21,6 +28,7 @@ public class BilAutoBlue extends LinearOpMode {
 
     private Movement movement;
     private Hardware hardware;
+    private DeviceInterfaceModule cdim;
 
     private HardwarePushbot robot = new HardwarePushbot();
     private ElapsedTime runtime = new ElapsedTime();
@@ -31,6 +39,12 @@ public class BilAutoBlue extends LinearOpMode {
 
     private double ARM_UP_POWER = -0.35;
     private double ARM_DOWN_POWER = 0.35;
+
+    private double armLowered = 0.5;
+    private double armRaised = 0.5;
+
+    int blue = robot.colorSensor.blue();
+    int red = robot.colorSensor.red();
 
 
     public void autoinit() throws Exception {
@@ -48,7 +62,7 @@ public class BilAutoBlue extends LinearOpMode {
             robot.init(hardwareMap);
             movement = new Movement(hardware, this);
             movement.setVerbose(true);
-        } catch(Exception e) {
+        } catch (Exception e) {
             ExceptionHandling.standardExceptionHandling(e, this);
         }
     }
@@ -68,9 +82,28 @@ public class BilAutoBlue extends LinearOpMode {
 
             if (opModeIsActive()) {
 
+                // Lower arm, knock enemy jewel off
+
+                robot.knocker.setPosition(armLowered);
+
+                robot.colorSensor.enableLed(true);
+
+                if (blue > red) {
+                    // rotates to knock red off using directTankDrive()
+                } else if (red > blue) {
+                    // rotates to knock red off using directTankDrive()
+                }
+
+                robot.knocker.setPosition(armRaised);
+
+                sleep(5000);
+
+                // Start going to Safety Zone — put glyph in crypto box
+
                 clawOffset = Range.clip(clawOffset, -0.5, 0.5);
                 robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
                 robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
+
 
                 // Move Arm up
                 robot.leftArm.setPower(ARM_UP_POWER);
@@ -89,7 +122,10 @@ public class BilAutoBlue extends LinearOpMode {
                     telemetry.update();
                 }
 
-                // Move arm down, claw releases crypto block
+                // Turn to face towards the box
+                // movement.directTankDrive();
+
+                // Move arm down, claw releases glyph
                 robot.leftArm.setPower(ARM_DOWN_POWER);
                 robot.rightArm.setPower(ARM_DOWN_POWER);
                 runtime.reset();
@@ -97,6 +133,12 @@ public class BilAutoBlue extends LinearOpMode {
                     telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
                     telemetry.update();
                 }
+
+                sleep(1000);
+
+                // Robot drives back slightly
+
+
 
                 telemetry.addData("Status", "Complete");
                 telemetry.update();

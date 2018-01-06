@@ -87,6 +87,9 @@ public class BilAutoRed1 extends LinearOpMode {
                     telemetry.update();
                 }
 
+                //Turn to face towards the crypto box
+
+
                 // Move arm down, claw releases crypto block
                 robot.leftArm.setPower(ARM_DOWN_POWER);
                 robot.rightArm.setPower(ARM_DOWN_POWER);

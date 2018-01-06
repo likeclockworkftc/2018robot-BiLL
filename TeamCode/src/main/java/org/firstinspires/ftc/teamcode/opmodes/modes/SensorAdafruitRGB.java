@@ -74,42 +74,19 @@ import org.firstinspires.ftc.teamcode.HardwarePushbot;
  */
 
 
-public class SensorAdafruitRGB {
+public class SensorAdafruitRGB extends LinearOpMode{
 
     ColorSensor sensorRGB;
     DeviceInterfaceModule cdim;
-
-    private Movement movement;
-    private Hardware hardware;
-    private HardwarePushbot robot;
-    private LinearOpMode ctx;
-
-    private Servo knocker;
-    private double armLowered = 0.5;
-    private double armRaised = 0.5;
-
 
     // we assume that the LED pin of the RGB sensor is connected to
     // digital port 5 (zero indexed).
 
     static final int LED_CHANNEL = 5;
 
-    public SensorAdafruitRGB(ColorSensor sensorRGB, DeviceInterfaceModule cdim) {
-        this.sensorRGB = sensorRGB;
-        this.cdim = cdim;
-        this.knocker = ctx.hardwareMap.get(Servo.class, "knocker");
-    }
 
-    public void raiseArm() {
-        knocker.setPosition(armRaised);
-    }
-
-    public void lowerArm() {
-        knocker.setPosition(armLowered);
-    }
-
-
-    public void run() {
+    @Override
+    public void runOpMode() {
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
@@ -119,8 +96,8 @@ public class SensorAdafruitRGB {
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = ctx.hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", ctx.hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) ctx.hardwareMap.appContext).findViewById(relativeLayoutId);
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         // bPrevState and bCurrState represent the previous and current state of the button.
         boolean bPrevState = false;
@@ -130,7 +107,7 @@ public class SensorAdafruitRGB {
         boolean bLedOn = true;
 
         // get a reference to our DeviceInterfaceModule object.
-        cdim = ctx.hardwareMap.deviceInterfaceModule.get("dim");
+        cdim = hardwareMap.deviceInterfaceModule.get("dim");
 
         // set the digital channel to output mode.
         // remember, the Adafruit sensor is actually two devices.
@@ -138,19 +115,19 @@ public class SensorAdafruitRGB {
         cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannel.Mode.OUTPUT);
 
         // get a reference to our ColorSensor object.
-        sensorRGB = ctx.hardwareMap.colorSensor.get("sensor_color");
+        sensorRGB = hardwareMap.colorSensor.get("sensor_color");
 
         // turn the LED on in the beginning, just so user will know that the sensor is active.
         cdim.setDigitalChannelState(LED_CHANNEL, bLedOn);
 
         // wait for the start button to be pressed.
-        ctx.waitForStart();
+        waitForStart();
 
         // loop and read the RGB data.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
 
         // check the status of the x button on gamepad.
-        bCurrState = ctx.gamepad1.x;
+        bCurrState = gamepad1.x;
 
         // check for button-press state transitions.
         if ((bCurrState == true) && (bCurrState != bPrevState)) {
@@ -167,12 +144,12 @@ public class SensorAdafruitRGB {
         Color.RGBToHSV((sensorRGB.red() * 255) / 800, (sensorRGB.green() * 255) / 800, (sensorRGB.blue() * 255) / 800, hsvValues);
 
         // send the info back to driver station using telemetry function.
-        ctx.telemetry.addData("LED", bLedOn ? "On" : "Off");
-        ctx.telemetry.addData("Clear", sensorRGB.alpha());
-        ctx.telemetry.addData("Red  ", sensorRGB.red());
-        ctx.telemetry.addData("Green", sensorRGB.green());
-        ctx.telemetry.addData("Blue ", sensorRGB.blue());
-        ctx.telemetry.addData("Hue", hsvValues[0]);
+        telemetry.addData("LED", bLedOn ? "On" : "Off");
+        telemetry.addData("Clear", sensorRGB.alpha());
+        telemetry.addData("Red  ", sensorRGB.red());
+        telemetry.addData("Green", sensorRGB.green());
+        telemetry.addData("Blue ", sensorRGB.blue());
+        telemetry.addData("Hue", hsvValues[0]);
 
         // change the background color to match the color detected by the RGB sensor.
         // pass a reference to the hue, saturation, and value array as an argument
@@ -183,7 +160,7 @@ public class SensorAdafruitRGB {
             }
         });
 
-        ctx.telemetry.update();
+        telemetry.update();
 
         // Set the panel back to the default color
         relativeLayout.post(new Runnable() {

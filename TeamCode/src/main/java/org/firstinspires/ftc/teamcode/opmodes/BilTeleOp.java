@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -70,15 +71,16 @@ public class BilTeleOp extends OpMode{
         while (gamepad2.x == true) {
             telemetry.addData("Claw Status: ", "Snail");
             telemetry.update();
-            if (gamepad2.right_bumper)
+            if (gamepad2.right_bumper) {
                 clawOffset += 0.005;
-            else if (gamepad2.left_bumper)
+            } else if (gamepad2.left_bumper)
                 clawOffset -= 0.005;
         }
             telemetry.addData("Claw Status: ", "Normal");
             telemetry.update();
 
         // Servos should move in unison
+
         clawOffset = Range.clip(clawOffset, -0.5, 0.5);
         robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
         robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);

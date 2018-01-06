@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.modes;
+package org.firstinspires.ftc.teamcode.ARCHIVED;
 
 
 import android.app.Activity;
@@ -24,30 +24,11 @@ public class KnockJewel {
     private HardwarePushbot robot;
     private LinearOpMode ctx;
 
-    private Servo knocker;
-    ColorSensor colorSensor;
-    DeviceInterfaceModule dim;
-
+    public Servo knocker;
+    public ColorSensor colorSensor;
 
     private double armLowered = 0.5;
     private double armRaised = 0.5;
-
-    public KnockJewel() {
-        this.knocker = ctx.hardwareMap.get(Servo.class, "knocker");
-        colorSensor = ctx.hardwareMap.get(ColorSensor.class, "color_sensor");
-    }
-
-//    public void showColor() {
-//        int relativeLayoutId = ctx.hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id",
-//                ctx.hardwareMap.appContext.getPackageName());
-//        final View relativeLayout = ((Activity) ctx.hardwareMap.appContext).findViewById(relativeLayoutId);
-//    }
-
-    public void scanColor() {
-
-    }
-
-
 
     public void setArmRaised() {
         knocker.setPosition(armRaised);
@@ -56,6 +37,9 @@ public class KnockJewel {
     public void setArmLowered() {
         knocker.setPosition(armLowered);
     }
+
+
+
 
 
 

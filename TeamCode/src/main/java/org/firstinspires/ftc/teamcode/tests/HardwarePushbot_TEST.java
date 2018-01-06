@@ -27,34 +27,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class HardwarePushbot
+public class HardwarePushbot_TEST
 
 {
     /* Public OpMode members. */
-    public Servo leftClaw = null;
-    public Servo rightClaw = null;
-    public Servo knocker = null;
-    public DcMotor leftArm = null;
-    public DcMotor rightArm = null;
+//    public Servo leftClaw = null;
+//    public Servo rightClaw = null;
+    public Servo knocker;
+//    public DcMotor leftArm = null;
+//    public DcMotor rightArm = null;
 
-    public ColorSensor colorSensor = null;
+    public ColorSensor colorSensor;
 
-    public static final double MID_SERVO = 0.5;
-    public static final double ARM_UP_POWER = -0.45;
-    public static final double ARM_DOWN_POWER = 0.45;
+//    public static final double MID_SERVO = 0.5;
+//    public static final double ARM_UP_POWER = -0.45;
+//    public static final double ARM_DOWN_POWER = 0.45;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
     /* Constructor */
-    public HardwarePushbot() {
+    public HardwarePushbot_TEST() {
 
     }
 
@@ -64,28 +64,29 @@ public class HardwarePushbot
         hwMap = ahwMap;
 
         // Define installed Motors
-        rightArm = hwMap.get(DcMotor.class, "right_arm");
-        leftArm = hwMap.get(DcMotor.class, "left_arm");
+//        rightArm = hwMap.get(DcMotor.class, "right_arm");
+//        leftArm = hwMap.get(DcMotor.class, "left_arm");
         // Sets default power
-        rightArm.setPower(0);
-        leftArm.setPower(0);
+//        rightArm.setPower(0);
+//        leftArm.setPower(0);
         // Sets motors to run without encoders
-        rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // Reverses the motors
         // Right one is not reversed
-        leftArm.setDirection(DcMotor.Direction.REVERSE);
+//        leftArm.setDirection(DcMotor.Direction.REVERSE);
 
         // Define and initialize ALL installed servos.
-        rightClaw = hwMap.get(Servo.class, "right_hand");
-        leftClaw = hwMap.get(Servo.class, "left_hand");
+//        rightClaw = hwMap.get(Servo.class, "right_hand");
+//        leftClaw = hwMap.get(Servo.class, "left_hand");
         knocker = hwMap.get(Servo.class, "knocker");
-        rightClaw.setPosition(MID_SERVO);
-        leftClaw.setPosition(MID_SERVO);
+//        rightClaw.setPosition(MID_SERVO);
+//        leftClaw.setPosition(MID_SERVO);
 
         // Define and initialize REV color sensor
         colorSensor = hwMap.get(ColorSensor.class, "color_sensor");
 
     }
+
 }
 

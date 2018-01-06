@@ -1,39 +1,35 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonomous.Blue;
+package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import com.vvftc.ninevolt.core.hw.Hardware;
 import com.vvftc.ninevolt.core.hw.HardwareBuilder;
 import com.vvftc.ninevolt.core.hw.drivetrain.standard.Movement;
 import com.vvftc.ninevolt.util.ExceptionHandling;
 
-import org.firstinspires.ftc.teamcode.HardwarePushbot;
-
 /**
- * Created by ryankoo on 9/19/17.
+ * Created by ryankoo on 12/21/17.
  */
 
-@Autonomous(name = "blueLong", group = "robot")
-public class BilAutoBlue1 extends LinearOpMode {
+@Autonomous(name = "Jewel_Test", group = "tests")
+public class Auto_Check_Color extends LinearOpMode {
+
 
     private Movement movement;
     private Hardware hardware;
-    private HardwarePushbot robot = new HardwarePushbot();
+    HardwareMap hwMap = null;
 
+    private HardwarePushbot_TEST robot = new HardwarePushbot_TEST();
     private ElapsedTime runtime = new ElapsedTime();
-
-    private double FORWARD_SPEED = 0.39;
-
-    private double clawOffset = 0.1;
-
-    private double ARM_UP_POWER = -0.35;
-    private double ARM_DOWN_POWER = 0.35;
 
     private double armLowered = 0.7;
     private double armRaised = 0.5;
+
 
     public int blue() {
         return robot.colorSensor.blue();
@@ -43,7 +39,8 @@ public class BilAutoBlue1 extends LinearOpMode {
         return robot.colorSensor.red();
     }
 
-    public void autoinit() {
+    public void test_init() {
+
         try {
             HardwareBuilder hb = new HardwareBuilder(hardwareMap);
             hb.setMotorConfig(Hardware.MotorMode.TWO_MOTORS, DcMotor.Direction.FORWARD)
@@ -53,24 +50,25 @@ public class BilAutoBlue1 extends LinearOpMode {
             hb = null;
             // initialize robot parts
             hardware.init();
-            // initialize servos
+            // initialize servos *EDIT* TEST: not initializing servos
+            //****
             robot.init(hardwareMap);
+            //****
             movement = new Movement(hardware, this);
             movement.setVerbose(true);
         } catch (Exception e) {
             ExceptionHandling.standardExceptionHandling(e, this);
         }
-
     }
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         try {
 
-            autoinit();
+            test_init();
 
-            telemetry.addData("Status", "Ready to start");
+            telemetry.addData("Status", "Testing color sensor");
             telemetry.update();
 
             waitForStart();
@@ -128,49 +126,10 @@ public class BilAutoBlue1 extends LinearOpMode {
 
                 sleep(5000);
 
-                clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-                robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
-                robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
 
-                // rotate 180 for blue side (faces backwards)
-
-
-
-                // Move Arm up
-                robot.leftArm.setPower(ARM_UP_POWER);
-                robot.rightArm.setPower(ARM_UP_POWER);
-                runtime.reset();
-                while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                    telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                    telemetry.update();
-                }
-
-                // 3: Move forward SLIGHTLY
-                movement.directTankDrive(FORWARD_SPEED, FORWARD_SPEED);
-                runtime.reset();
-                while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                    telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                    telemetry.update();
-                }
-
-                // Move arm down, claw releases crypto block
-                robot.leftArm.setPower(ARM_DOWN_POWER);
-                robot.rightArm.setPower(ARM_DOWN_POWER);
-                runtime.reset();
-                while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                    telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                    telemetry.update();
-                }
-
-                telemetry.addData("Status", "Complete");
-                telemetry.update();
-
-                idle();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-
+        } catch (Exception exc) {
+            exc.printStackTrace();
         }
     }
 }
-
